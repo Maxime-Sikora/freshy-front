@@ -1,0 +1,33 @@
+:root {
+  --font-family: 'Montserrat', sans-serif;
+  --text-color: #222;
+  --gray-100: #dfe6e9;
+  --gray-700: #2c3a47;
+  --light: #e9d5ff;
+  --primary: #7e22ce;
+  --dark: #3b0764;
+  --success: #22c55e;
+  --danger: #dc2626;
+
+  --border: 1px solid var(--gray-100);
+  --radius: 10px;
+
+  // 🎨 Palette Freshy (Hero)
+
+  // Couleurs principales
+  --color-primary: #4caf50; // Vert nature principal (boutons, accents)
+  --color-primary-dark: #388e3c; // Vert foncé (hover, texte accentué)
+  --color-primary-light: #a5d6a7; // Vert clair (fond léger, hover doux)
+
+  // Couleurs de fond
+  --color-background: #e8f5e9; // Fond très clair, légèrement vert
+  --color-surface: #ffffff; // Surface blanche (cards, blocs)
+
+  // Couleurs texte
+  --color-text: #1b5e20; // Texte principal (vert foncé)
+  --color-text-muted: #4e6e4d; // Texte secondaire
+
+  // Autres
+  --color-border: #c8e6c9; // Bordures discrètes
+  --color-accent: #8bc34a; // Accent vert tendre (chips "bio", "local")
+}
