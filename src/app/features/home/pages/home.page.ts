@@ -7,4 +7,4 @@ import { HeroComponent } from '../components/hero.component';
   template: ` <app-hero /> `,
   styles: ``,
 })
-export class HomeComponent {}
+export class HomePage {}

@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
   template: ` <p>cart works!</p> `,
   styles: ``,
 })
-export class CartComponent {}
+export class CartPage {}

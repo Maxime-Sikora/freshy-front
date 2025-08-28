@@ -18,6 +18,7 @@ import { FooterComponent } from './shared/ui/footer.component';
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background-color: var(--color-background);
     }
     .app-main {
       flex: 1 1 auto;

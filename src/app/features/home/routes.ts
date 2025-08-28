@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home.component';
+import { HomePage } from './pages/home.page';
 
-export const routes: Routes = [{ path: '', component: HomeComponent }];
+export const routes: Routes = [{ path: '', component: HomePage }];
