@@ -3,3 +3,16 @@
 @use './styles/reset';
 @use './styles/utils';
 @use './styles/variables';
+@use '@angular/material' as mat;
+:root {
+  @include mat.card-overrides(
+    (
+      elevated-container-color: white,
+    )
+  );
+  @include mat.fab-overrides(
+    (
+      container-color: #4caf50,
+    )
+  );
+}

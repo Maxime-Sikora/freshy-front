@@ -1,4 +1,4 @@
-import { User } from '../../auth/models/user.model';
+import { User } from '../../../shared/models/user.model';
 import { Category } from '../../categories/models/categories.model';
 
 export interface Product {

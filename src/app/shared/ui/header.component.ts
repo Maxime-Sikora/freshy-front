@@ -30,16 +30,21 @@ import { RouterLink } from '@angular/router';
       top: 0;
     }
     header {
-      background-color: var(--color-background);
+      background-color: var(--color-surface);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     .logo {
-      width: 50px;
-      height: 50px;
+      width: 75px;
+      height: 75px;
+      margin-left: 30px;
     }
     .navbar {
       display: flex;
       align-items: center;
       height: 7dvh;
+    }
+    p {
+      font-size: 1.3rem;
     }
   `,
 })
