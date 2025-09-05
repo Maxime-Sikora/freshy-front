@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthStore } from '../../features/auth/store/auth.store';
 
 @Component({
   selector: 'app-header',
@@ -16,10 +17,13 @@ import { RouterLink } from '@angular/router';
           <a routerLink="/products">Produits</a>
           <a routerLink="">Producteurs</a>
           <a routerLink="">A propos</a>
-          <a routerLink="/auth">Connexion</a>
-          <a routerLink="/cart">Panier</a>
-          <a routerLink="">Profil</a>
-          <a routerLink="">Déconnexion</a>
+          @if (auth.isAuthenticated()) {
+            <a routerLink="/cart">Panier</a>
+            <a routerLink="">Profil</a>
+            <button class="link-like" (click)="signout()">Déconnexion</button>
+          } @else {
+            <a routerLink="/auth">Connexion</a>
+          }
         </nav>
       </div>
     </header>
@@ -28,6 +32,18 @@ import { RouterLink } from '@angular/router';
     :host {
       position: sticky;
       top: 0;
+    }
+    .link-like {
+      background: none;
+      border: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .link-like:hover {
+      text-decoration: underline;
     }
     header {
       background-color: var(--color-surface);
@@ -48,4 +64,12 @@ import { RouterLink } from '@angular/router';
     }
   `,
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  readonly auth = inject(AuthStore);
+  private router = inject(Router);
+
+  async signout() {
+    this.auth.signout();
+    await this.router.navigateByUrl('/');
+  }
+}
