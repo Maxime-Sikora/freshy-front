@@ -3,10 +3,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SigninFormDto } from '../models/auth.model';
 import { AuthStore } from '../store/auth.store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-signin',
@@ -35,6 +36,13 @@ import { AuthStore } from '../store/auth.store';
                 type="email"
                 id="email"
               />
+              @if (email.touched && email.hasError('incorrectMail')) {
+                <mat-error>Email ou mot de passe incorrect.</mat-error>
+              } @else if (email.touched && email.hasError('required')) {
+                <mat-error>L'email est requis.</mat-error>
+              } @else if (email.touched && email.hasError('email')) {
+                <mat-error>Veuillez saisir un email valide.</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline" class="full">
               <mat-label>Mot de passe</mat-label>
@@ -45,6 +53,13 @@ import { AuthStore } from '../store/auth.store';
                 type="password"
                 id="password"
               />
+              @if (password.touched && password.hasError('incorrectPassword')) {
+                <mat-error>Email ou mot de passe incorrect</mat-error>
+              } @else if (password.touched && password.hasError('minlength')) {
+                <mat-error>Le mot de passe doit faire 6 caractère minimum</mat-error>
+              } @else if (password.touched && password.hasError('required')) {
+                <mat-error>Le mot de passe est requis</mat-error>
+              }
             </mat-form-field>
             <mat-card-actions class="full">
               <button mat-flat-button class="btn-pill btn-lg full">Connexion</button>
@@ -84,6 +99,7 @@ import { AuthStore } from '../store/auth.store';
     .full {
       width: 100%;
       display: block;
+      margin-bottom: 10px;
     }
     .btn-pill {
       border-radius: 9999px;
@@ -106,13 +122,30 @@ export class SigninPage {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
+  get email() {
+    return this.signinForm.get('email') as FormControl;
+  }
+
+  get password() {
+    return this.signinForm.get('password') as FormControl;
+  }
+
   async submit() {
     const signinForm = this.signinForm.getRawValue() as SigninFormDto;
     try {
       await this.authStore.signin(signinForm);
       this.router.navigateByUrl('/users/profil');
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      const e = error as HttpErrorResponse;
+      if (e.error.statusCode === 401) {
+        this.signinForm
+          .get('email')
+          ?.setErrors({ incorrectMail: true, serverMessage: 'Email ou mot de passe incorrect' });
+        this.signinForm.get('password')?.setErrors({
+          incorrectPassword: true,
+          serverMessage: 'Email ou mot de passe incorrect',
+        });
+      }
     }
   }
 }

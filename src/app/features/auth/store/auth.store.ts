@@ -1,23 +1,22 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { AuthApi } from '../data/auth.api';
 import { SigninFormDto } from '../models/auth.model';
+import { UserStore } from '../../users/store/user.store';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private authApi = inject(AuthApi);
+  private userStore = inject(UserStore);
 
-  private readonly _token = signal<string | null>(null);
-  token = this._token.asReadonly();
-  isAuthenticated = computed(() => !!this._token());
+  isAuthenticated = computed(() => !!this.userStore.user());
 
   async signin(signinForm: SigninFormDto): Promise<void> {
-    const { access_token } = await this.authApi.signin(signinForm);
-    this._token.set(access_token);
-    localStorage.setItem('access_token', access_token);
+    await this.authApi.signin(signinForm);
+    this.userStore.reload();
   }
 
-  signout() {
-    this._token.set(null);
-    localStorage.removeItem('access_token');
+  async signout(): Promise<void> {
+    await this.authApi.signout();
+    this.userStore.clear();
   }
 }

@@ -1,19 +1,20 @@
-import { Injectable, resource } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environments';
 import { Product } from '../models/product.model';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsApi {
-  productResource = resource({
-    loader: async (): Promise<Product[]> => {
-      // Simuler un délai de 4 secondes
-      await new Promise((resolve) => setTimeout(resolve, 4000));
+  private http = inject(HttpClient);
 
-      const response = await fetch(`${environment.apiBaseUrl}/product/all`);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      return response.json();
-    },
-  });
+  async allProduct(): Promise<Product[]> {
+    return await firstValueFrom(this.http.get<Product[]>(`${environment.apiBaseUrl}/product/all`));
+  }
+
+  async myProduct(): Promise<Product[]> {
+    return await firstValueFrom(
+      this.http.get<Product[]>(`${environment.apiBaseUrl}/product/myProducts`),
+    );
+  }
 }

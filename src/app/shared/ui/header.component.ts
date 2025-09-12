@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../features/auth/store/auth.store';
+import { UserStore } from '../../features/users/store/user.store';
 
 @Component({
   selector: 'app-header',
   imports: [RouterLink],
   template: `
-    <header class="px-12 py-6">
+    <header class="px-12 py-6 radius">
       <div class="navbar">
         <div class="flex-auto flex">
           <img class="logo" src="/brand/freshyLogo.png" alt="Le logo de Freshy" />
@@ -17,9 +18,12 @@ import { AuthStore } from '../../features/auth/store/auth.store';
           <a routerLink="/products">Produits</a>
           <a routerLink="">Producteurs</a>
           <a routerLink="">A propos</a>
-          @if (auth.isAuthenticated()) {
+          @if (authStore.isAuthenticated()) {
             <a routerLink="/cart">Panier</a>
-            <a routerLink="">Profil</a>
+            <a routerLink="/users">Profil</a>
+            @if (userStore.isAdmin()) {
+              <a routerLink="/admin">Admin</a>
+            }
             <button class="link-like" (click)="signout()">Déconnexion</button>
           } @else {
             <a routerLink="/auth">Connexion</a>
@@ -31,7 +35,9 @@ import { AuthStore } from '../../features/auth/store/auth.store';
   styles: `
     :host {
       position: sticky;
-      top: 0;
+      top: 20px;
+      width: 95dvw;
+      margin: auto;
     }
     .link-like {
       background: none;
@@ -65,11 +71,12 @@ import { AuthStore } from '../../features/auth/store/auth.store';
   `,
 })
 export class HeaderComponent {
-  readonly auth = inject(AuthStore);
+  readonly authStore = inject(AuthStore);
+  readonly userStore = inject(UserStore);
   private router = inject(Router);
 
   async signout() {
-    this.auth.signout();
+    await this.authStore.signout();
     await this.router.navigateByUrl('/');
   }
 }

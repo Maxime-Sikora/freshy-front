@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environments';
-import { AccessToken } from '../models/auth.model';
 import { SigninFormDto } from '../models/auth.model';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -9,9 +8,13 @@ import { firstValueFrom } from 'rxjs';
 export class AuthApi {
   private http = inject(HttpClient);
 
-  async signin(signinForm: SigninFormDto): Promise<AccessToken> {
+  async signin(signinForm: SigninFormDto): Promise<void> {
     return await firstValueFrom(
-      this.http.post<AccessToken>(`${environment.apiBaseUrl}/auth`, signinForm),
+      this.http.post<void>(`${environment.apiBaseUrl}/auth/signin`, signinForm),
     );
+  }
+
+  async signout() {
+    await firstValueFrom(this.http.post<void>(`${environment.apiBaseUrl}/auth/logout`, {}));
   }
 }

@@ -21,4 +21,8 @@ export const routes: Routes = [
     path: 'users',
     loadChildren: async () => (await import('./features/users/routes')).routes,
   },
+  {
+    path: 'admin',
+    loadChildren: async () => (await import('./features/admin/routes')).routes,
+  },
 ];
